@@ -29,6 +29,7 @@ text.title {
 }
 circle {
   opacity: .6;
+  /* COLOR */
   fill: lightblue;
   stroke: blue;
 }
@@ -62,7 +63,7 @@ div.tooltip {
   float: right;
   width: 300px;
   font-family: Futura;
-  font: 19px sans-serif ;
+  font: 15px sans-serif ;
 }
 #chart1{
   position: fixed;

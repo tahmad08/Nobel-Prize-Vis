@@ -1,3 +1,14 @@
+/* TO DO's:
+- try to make the category chart into a pie chart
+- link the category chart to the timeline
+- make the country/gender sideways bar chart
+- also add a brush that if you highlight certain dots,
+    it returns stats (right below the name, age... detail) such as: 
+    range of years highlighted, total # of prizes
+    most common category in those years, etc
+
+ */
+
 //width0 and height0 are for the actual svg
 var width0 = 1300;
 var height0 = 800;
@@ -20,7 +31,7 @@ var chart0G = d3.select("#chart0")
     .attr("height", height0)
     .append("g")
     .attr("transform",
-                `translate(50,400)`);
+                `translate(40,400)`);
 
 //tooltip
 const tooltip = d3.select("#chart0")
@@ -73,7 +84,9 @@ d3.csv(dataFile, function(error, allData) {
                 name: p.fullname,
                 motiv: p.motivation,
                 age: p.age,
+                // bore: datef(p.born),
                 bornin: p.born_city + ", " + p.born_country,
+                bornfrom: p.born + " -- " + p.died,
                 categ: p.category,
                 value: p.year,
                     radius: (x(d.x1)-x(d.x0))/4.5}
@@ -93,7 +106,8 @@ d3.csv(dataFile, function(error, allData) {
         .attr("r", d => d.radius)
         .on("click", function(d){
             document.querySelector('#nameO').value = d.name;
-			document.querySelector('#ageO').value = d.age;
+            document.querySelector('#ageO').value = d.age;
+			document.querySelector('#bornfromO').value = d.bornfrom;
 			document.querySelector('#borninO').value = d.bornin;
 			document.querySelector('#motivationO').value = d.motiv;
 			document.querySelector('#categoryO').value = d.categ;
@@ -109,7 +123,24 @@ d3.csv(dataFile, function(error, allData) {
 
 });
 categoryChart();
-chart0G.call(tooltip);
+
+//date formating ATTEMPT TO DO
+function datef(d){
+    // console.log(d);
+    var origDate = d;
+    var formatTime = d3.timeFormat("%Y-%m-%d");
+    console.log(formatTime(origDate)); // "June 30, 2015"
+    // var format = d3.time.format("%Y-%m-%d");
+    // // convert the date string into a date object:
+    // var date = format.parse(string);
+    // // output the date object as a string based on the format:
+    // console.log(format(date));
+    // // use the desired format
+    // var format1 = d3.time.format("%B %d, %Y");
+    // // output a date as a string in the desired format
+    // console.log(format1(date));
+}
+
 //hover functionality
 function tooltipon(d){
     let gParent = d3.select(this.parentElement)
@@ -120,6 +151,7 @@ function tooltipon(d){
 
     d3.select(this)
         .classed("selected", true)
+        //COLOR when hovering
         .style("fill", "purple");
     tooltip.transition()
         .duration(200)
@@ -133,6 +165,7 @@ function tooltipon(d){
 function tooltipoff(d) {
     d3.select(this)
         .classed("selected", false)
+        //COLOR it goes back to when you stop hovering
         .style("fill", "lightblue");
       tooltip.transition()
            .duration(500)
@@ -144,8 +177,10 @@ function categoryChart(){
     // **** Your JavaScript code goes here ****
     var data_arr;
     var svg = d3.select("#main").select("svg");
+    //w/h of actual svg so no overlap
     var width0 = 325;
     var height0 = 375;
+    //w/h given to chart so it formats nicely :)
     var width = 760;
     var height = 600;
     d3.csv("nobel_laureates.csv", function(dataset){
@@ -233,6 +268,5 @@ function categoryChart(){
         var y0 = d3.scaleLinear()
             .domain([0, extent0[1] + 10])
             .range([height, 300])
-
 
 }}
