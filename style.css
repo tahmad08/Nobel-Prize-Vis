@@ -10,7 +10,14 @@ text.label {
     font-family: sans-serif;
 }
 
+.chart0G{
+  display: block;
+  margin: 0 auto;
+  position: absolute;
+  top: calc(50% - 24px);
+  left: calc(50% - 24px);
 
+}
 .bar2 {
       fill: red;
     }
@@ -28,4 +35,9 @@ text.title {
     text-anchor: middle;
     font-size: 14px;
     fill: #333;
+}
+circle {
+  opacity: .6;
+  fill: lightblue;
+  stroke: blue;
 }
