@@ -1,12 +1,12 @@
-/* TO DO's: 
+/* TO DO's:
 CTRL + F "TODO" AND FINISH
-( ) the timeline axis needs a label 
+( ) the timeline axis needs a label
         (X) timeline axis ticks should NOT have commas
 (X) try to make the category chart into a pie chart
 ( ) link the category chart to the timeline
 ( ) make the country/gender sideways bar chart
 ( ) also add a brush that if you highlight certain dots,
-    it returns stats (right below the name, age... detail) such as: 
+    it returns stats (right below the name, age... detail) such as:
     range of years highlighted, total # of prizes
     most common category in those years, etc
 ( ) fix position of the svg elements
@@ -20,17 +20,17 @@ pieCategory();
 var width0 = 1300;
 var height0 = 800;
 
-//width and height are for the graph to use itself. 
+//width and height are for the graph to use itself.
 //i could do margins? but nah
 var width = 1250;
 var height = 400;
 
 
-//made the x 
+//made the x
 var x = d3.scaleLinear()
     .rangeRound([0, width])
     .domain([1895, 2018]);
-    
+
 
 //create the svg and append it, translated halfway down the screen
 var chart0G = d3.select("#chart0")
@@ -50,7 +50,7 @@ const t = d3.transition()
     .duration(1000);
 
 //data file
-var dataFile = "nobel_laureates.csv"
+var dataFileName = "nobel_laureates.csv"
 
 //number of bins for histogram
 // 2018 - 1900 = 118/2 = 59
@@ -60,12 +60,17 @@ const nbins = 59;
 var cbin;
 
 //get data
-d3.csv(dataFile, function(error, allData) {
+d3.csv(dataFileName, function(error, allData) {
     //append what we need to the array allDate
     allData.forEach(function(d) {
         d.fullname = d.fullname
         d.year = +d.year
+        //d.year = d3.time.format("%Y-%m-%d").parse(d.year)
+        //parseData(d.year);
         d.motivation = d.motivation;
+        if (d.died = "0000-00-00") {
+             d.died = "Present"
+        }
     });
     //histogram binning
     const histogram = d3.histogram()
@@ -99,6 +104,7 @@ d3.csv(dataFile, function(error, allData) {
                 value: p.year,
                     rad: (x(d.x1)-x(d.x0))/4.5}
         }))
+
         //add the circles!!
         .enter()
         .append("circle")
@@ -113,12 +119,24 @@ d3.csv(dataFile, function(error, allData) {
             return -1*(- i * 2.3 * d.rad - d.rad)})
         .attr("r", d => d.rad)
         .on("click", function(d){
-            document.querySelector('#nameO').value = d.name;
-            document.querySelector('#ageO').value = d.age;
-			document.querySelector('#bornfromO').value = d.bornfrom;
-			document.querySelector('#borninO').value = d.bornin;
-			document.querySelector('#motivationO').value = d.motiv;
-			document.querySelector('#categoryO').value = d.categ;
+            d3.select('#name')
+            .text(d.name)
+            d3.select('#age')
+            .text(d.age)
+            d3.select('#lived')
+            .text(d.bornfrom)
+            d3.select('#bornin')
+            .text(d.bornin)
+            d3.select('#motivation')
+            .text(d.motiv)
+            d3.select('#category')
+            .text(d.categ)
+            // document.querySelector('#nameO').value = d.name;
+            // document.querySelector('#ageO').value = d.age;
+			// document.querySelector('#bornfromO').value = d.bornfrom;
+			// document.querySelector('#borninO').value = d.bornin;
+			// document.querySelector('#motivationO').value = d.motiv;
+			// document.querySelector('#categoryO').value = d.categ;
         })
         .on("mouseover", tooltipon)
         .on('mouseout', tooltipoff);
@@ -156,14 +174,14 @@ function datef(d){
 function tooltipon(d){
     let gParent = d3.select(this.parentElement)
     let translateValue = gParent.attr("transform")
-  
+
     let gX = translateValue.split(",")[0].split("(")[1]
     let gY = height + (+d3.select(this).attr("cy")-5)
 
     d3.select(this)
         .classed("selected", true)
         //COLORFIX when hovering
-        .style("fill", "purple");
+        //.style("fill", "purple");
     tooltip.transition()
         .duration(200)
         .style("opacity", .9);
@@ -177,13 +195,13 @@ function tooltipoff(d) {
     d3.select(this)
         .classed("selected", false)
         //COLORFIX it goes back to when you stop hovering
-        .style("fill", "lightblue");
+        //.style("fill", "lightblue");
       tooltip.transition()
            .duration(500)
            .style("opacity", 0);
   }//tooltipOff
 
-  
+
 
 function pieCategory(){
     var svg = d3.select("#chart1").select("svg");
@@ -233,20 +251,20 @@ function pieCategory(){
     var pie = d3.pie()
         .value(function(d) { return d.value; })
         .sort(null);
-    
+
     var path = g.selectAll('path')
         .data(pie(dataSet))
         .enter()
         .append("g")
         .on("mouseover", function(d) {
               let g = d3.select(this)
-                .style("cursor", "pointer")
-                .style("fill", "lightblue")
+                //.style("cursor", "pointer")
+                //.style("fill", "lightblue")
                 .append("g")
                 .attr("class", "text-group");
 
             g.append("text")
-                .attr("class", "name-text")
+                .attr("class", "label")
                 .text(`${d.data.name}`)
                 .attr('text-anchor', 'middle')
                 .attr('dy', '-1.2em');
@@ -260,37 +278,50 @@ function pieCategory(){
                 .attr('dy', '.6em');
 
             //selects all the circles in the category selected and highlights them
-            // d3.selectAll('.' + d.data.name).style("fill", "orange");              
-            })     
+            // d3.selectAll('.' + d.data.name).style("fill", "orange");
+            })
         .on("click", function(d){
             //selects all the circles in the category selected and highlights them
-            d3.selectAll('.' + d.data.name).style("fill", "orange");              
+            if (d.category = "physics") {
+                d3.selectAll('.' + d.data.name)
+                .classed("physics-selected", true);
+                //.style("fill", "orange");
+            }
+            d3.selectAll('.' + d.data.name)
+            .classed("selected", true);
+            //.style("fill", "orange");
         })
         .on("mouseout", function(d) {
             d3.select(this)
-                .style("cursor", "none")  
-                .style("fill", color(this._current))
+                .classed("physics-selected", true)
+                .classed("selected", false)
+                //.style("cursor", "none")
+                //.style("fill", color(this._current))
                 .select(".text-group").remove();
-            
+
             //colorfix
-            d3.selectAll('.' + d.data.name).style("fill", "lightblue");   
+            d3.selectAll('.' + d.data.name).style("fill", "lightblue");
             })
         .append('path')
         .attr('d', arc)
         .attr('fill', (d,i) => color(i))
         .on("mouseover", function(d) {
-            d3.select(this)     
+            d3.select(this)
                 .style("cursor", "pointer")
+                .classed("hovered", true);
                 //COLORFIX do we want the hover color to be black
-                .style("fill", "black");
+                //.style("fill", "lightgrey");
             })
         .on("mouseout", function(d) {
             d3.select(this)
-                .style("cursor", "none")  
-                .style("fill", color(this._current));
+                .style("cursor", "none")
+                .classed("hovered", false)
+                .classed("selected", false)
+                .classed("physics-selected", false);
+                //.style("fill", color(this._current));
             })
         .each(function(d, i) { this._current = i; });
-        
+
         g.append('text')
             .attr('text-anchor', 'middle')
             .attr('dy', '.35em')
@@ -312,7 +343,7 @@ function pieCategory(){
         // console.log(dataReady)
     })
 
-    
+
 }
 
 

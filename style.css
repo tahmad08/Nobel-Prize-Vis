@@ -28,10 +28,11 @@ text.title {
     fill: #333;
 }
 circle {
-  opacity: .6;
+  /*opacity: .6;*/
   /* COLOR */
-  fill: lightblue;
-  stroke: blue;
+  fill: lightgrey;
+  stroke: lightgrey;
+
 }
 
 div.tooltip {
@@ -83,4 +84,18 @@ div.tooltip {
   height: 375px;
   font-family: Futura;
   font: 19px sans-serif ;
+}
+
+.selected {
+	stroke: red;
+	fill:red;
+}
+
+.hovered {
+    opacity: 0.4
+}
+
+.physics-selected {
+	stroke: "#68a357";
+	fill:"#68a357";
 }
