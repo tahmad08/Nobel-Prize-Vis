@@ -10,6 +10,7 @@ text.label {
     font-family: sans-serif;
 }
 
+/* center the svg in the middle */
 .chart0G{
   display: block;
   margin: 0 auto;
