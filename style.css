@@ -42,3 +42,18 @@ circle {
   fill: lightblue;
   stroke: blue;
 }
+
+div.tooltip {
+  color: black;
+  position: absolute;
+  text-align: left;
+  width: auto;
+  height: auto;
+  padding: 5px;
+  font-family: Futura;
+  font: 12px sans-serif ;
+  background: #FCB8C3FF;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+}
