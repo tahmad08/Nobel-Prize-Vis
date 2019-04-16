@@ -1,13 +1,20 @@
-/* TO DO's:
-- try to make the category chart into a pie chart
-- link the category chart to the timeline
-- make the country/gender sideways bar chart
-- also add a brush that if you highlight certain dots,
+/* TO DO's: 
+CTRL + F "TODO" AND FINISH
+( ) the timeline axis needs a label 
+        (X) timeline axis ticks should NOT have commas
+(X) try to make the category chart into a pie chart
+( ) link the category chart to the timeline
+( ) make the country/gender sideways bar chart
+( ) also add a brush that if you highlight certain dots,
     it returns stats (right below the name, age... detail) such as: 
     range of years highlighted, total # of prizes
     most common category in those years, etc
-
+( ) fix position of the svg elements
  */
+
+ //call to make the category chart
+// categoryChart();
+pieCategory();
 
 //width0 and height0 are for the actual svg
 var width0 = 1300;
@@ -23,6 +30,7 @@ var height = 400;
 var x = d3.scaleLinear()
     .rangeRound([0, width])
     .domain([1895, 2018]);
+    
 
 //create the svg and append it, translated halfway down the screen
 var chart0G = d3.select("#chart0")
@@ -31,7 +39,7 @@ var chart0G = d3.select("#chart0")
     .attr("height", height0)
     .append("g")
     .attr("transform",
-                `translate(40,400)`);
+                `translate(40,450)`);
 
 //tooltip
 const tooltip = d3.select("#chart0")
@@ -84,26 +92,26 @@ d3.csv(dataFile, function(error, allData) {
                 name: p.fullname,
                 motiv: p.motivation,
                 age: p.age,
-                // bore: datef(p.born),
+                // born: datef(p.born),
                 bornin: p.born_city + ", " + p.born_country,
                 bornfrom: p.born + " -- " + p.died,
                 categ: p.category,
                 value: p.year,
-                    radius: (x(d.x1)-x(d.x0))/4.5}
+                    rad: (x(d.x1)-x(d.x0))/4.5}
         }))
         //add the circles!!
         .enter()
         .append("circle")
-        .attr("class", "enter")
+        .attr("class", d => d.categ)
         .attr("id", function(d,i) {
             //id for circles is bin id + circle #
             cbin = d3.select(this.parentElement).attr("id").substring(3);
             return "b" + cbin + "c" + i;
-        } )
+        })
         .attr("cx", 0) //g element already at correct x pos
         .attr("cy", (d, i) => {
-            return -1*(- i * 2.3 * d.radius - d.radius)})
-        .attr("r", d => d.radius)
+            return -1*(- i * 2.3 * d.rad - d.rad)})
+        .attr("r", d => d.rad)
         .on("click", function(d){
             document.querySelector('#nameO').value = d.name;
             document.querySelector('#ageO').value = d.age;
@@ -114,17 +122,20 @@ d3.csv(dataFile, function(error, allData) {
         })
         .on("mouseover", tooltipon)
         .on('mouseout', tooltipoff);
+
         //add x axis on top
+        //TODO add a label to the x axis
         chart0G.append("g")
             .attr("class", "axis axis--x")
             .attr("transform", "translate(0," + 20 + ")")
-            .call(d3.axisTop(x));
+            .call(d3.axisTop(x)
+                .tickFormat(d3.format("d")));
+            // .tickFormat(axisFormatLocale.format(''));
 
-
+            // var xAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(d3.format("d"));
 });
-categoryChart();
 
-//date formating ATTEMPT TO DO
+//date formating ATTEMPT TODO change the lived from YYYY-MM-DD TO Month Day, YYYY
 function datef(d){
     // console.log(d);
     var origDate = d;
@@ -151,7 +162,7 @@ function tooltipon(d){
 
     d3.select(this)
         .classed("selected", true)
-        //COLOR when hovering
+        //COLORFIX when hovering
         .style("fill", "purple");
     tooltip.transition()
         .duration(200)
@@ -165,7 +176,7 @@ function tooltipon(d){
 function tooltipoff(d) {
     d3.select(this)
         .classed("selected", false)
-        //COLOR it goes back to when you stop hovering
+        //COLORFIX it goes back to when you stop hovering
         .style("fill", "lightblue");
       tooltip.transition()
            .duration(500)
@@ -173,10 +184,143 @@ function tooltipoff(d) {
   }//tooltipOff
 
   
+
+function pieCategory(){
+    var svg = d3.select("#chart1").select("svg");
+    var width0 = 400;
+    var height0 = 400;
+    var oRad = 125;
+    var iRad = 75;
+    var thick = 25;
+    var text = "";
+    var rad = 200;
+
+    var chemP = 19.56271577;
+    var litP = 12.88837745;
+    var medP = 24.16570771;
+    var peaP = 11.73762946;
+    var physP = 23.01495972;
+    var econP = 8.630609896;
+
+    //COLORFIX
+    var color = d3.scaleOrdinal(d3.schemeCategory20c);
+        // .range(["#f2db48", "#c97064", "#bca371", "#a6b07e", "#68a357", "#32965d"]);
+
+    //TODO change the names so they're capitalized
+    var dataSet = [
+        {name: "chemistry", value: chemP},
+        {name: "literature", value: litP},
+        {name: "medicine", value: medP},
+        {name: "peace", value: peaP},
+        {name: "physics", value: physP},
+        {name: "economics", value: econP}];
+
+    var datum = [chemP, litP, medP, peaP, physP, econP];
+
+    var svg = d3.select("#chart1")
+        .append("svg:svg") //create the SVG element inside the <body>
+        .attr("class", "pie")
+        // .data([dataSet]) //associate our data with the document
+        .attr("width", width0) //set the width of the canvas
+        .attr("height", height0); //set the height of the canvas
+
+    var g = svg.append('g')
+        .attr('transform', 'translate(' + (width0/2) + ',' + (height0/2) + ')');
+    var arc = d3.arc()
+        .innerRadius(rad - thick)
+        .outerRadius(oRad);
+
+    var pie = d3.pie()
+        .value(function(d) { return d.value; })
+        .sort(null);
+    
+    var path = g.selectAll('path')
+        .data(pie(dataSet))
+        .enter()
+        .append("g")
+        .on("mouseover", function(d) {
+              let g = d3.select(this)
+                .style("cursor", "pointer")
+                .style("fill", "lightblue")
+                .append("g")
+                .attr("class", "text-group");
+
+            g.append("text")
+                .attr("class", "name-text")
+                .text(`${d.data.name}`)
+                .attr('text-anchor', 'middle')
+                .attr('dy', '-1.2em');
+
+            g.append("text")
+                .attr("class", "value-text")
+                //TODO change the percents so the numbers aren't so long,
+                //maybe only 1 decimal place? below
+                .text(`${d.data.value + "%"}`)
+                .attr('text-anchor', 'middle')
+                .attr('dy', '.6em');
+
+            //selects all the circles in the category selected and highlights them
+            // d3.selectAll('.' + d.data.name).style("fill", "orange");              
+            })     
+        .on("click", function(d){
+            //selects all the circles in the category selected and highlights them
+            d3.selectAll('.' + d.data.name).style("fill", "orange");              
+        })
+        .on("mouseout", function(d) {
+            d3.select(this)
+                .style("cursor", "none")  
+                .style("fill", color(this._current))
+                .select(".text-group").remove();
+            
+            //colorfix
+            d3.selectAll('.' + d.data.name).style("fill", "lightblue");   
+            })
+        .append('path')
+        .attr('d', arc)
+        .attr('fill', (d,i) => color(i))
+        .on("mouseover", function(d) {
+            d3.select(this)     
+                .style("cursor", "pointer")
+                //COLORFIX do we want the hover color to be black
+                .style("fill", "black");
+            })
+        .on("mouseout", function(d) {
+            d3.select(this)
+                .style("cursor", "none")  
+                .style("fill", color(this._current));
+            })
+        .each(function(d, i) { this._current = i; });
+        
+        g.append('text')
+            .attr('text-anchor', 'middle')
+            .attr('dy', '.35em')
+            .text(text);
+
+    d3.csv("nobel_laureates.csv", function(error, data) {
+        var allGroup = ["chemistry", "literature", "medicine", "peace", "physics", "economics"];
+
+        // Reformat the data: we need an array of arrays of {x, y} tuples
+        var dataReady = allGroup.map( function(grpName) { // .map allows to do something for each element of the list
+        return {
+            name: grpName,
+            values: data.map(function(d) {
+            return {time: d.time, value: +d[grpName]};
+            })
+        };
+        });
+        // I strongly advise to have a look to dataReady with
+        // console.log(dataReady)
+    })
+
+    
+}
+
+
 function categoryChart(){
     // **** Your JavaScript code goes here ****
     var data_arr;
-    var svg = d3.select("#main").select("svg");
+    //CHANGED: d3.select("#main") to d3.select("#chart1")
+    var svg = d3.select("#chart1").select("svg");
     //w/h of actual svg so no overlap
     var width0 = 325;
     var height0 = 375;
