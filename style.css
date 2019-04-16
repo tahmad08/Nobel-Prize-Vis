@@ -52,7 +52,7 @@ div.tooltip {
   padding: 5px;
   font-family: Futura;
   font: 12px sans-serif ;
-  background: #FCB8C3FF;
+  background: rgb(233, 151, 164);
   border: 0px;
   border-radius: 8px;
   pointer-events: none;

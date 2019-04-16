@@ -59,6 +59,7 @@ d3.csv(dataFile, function(error, allData) {
 
     //g container for each bin
     let binContainer = chart0G.selectAll("g.gBin")
+        //bin shit, tbh idk what this does
         .data(bins)
         .enter()
         .append("g" )
@@ -72,6 +73,7 @@ d3.csv(dataFile, function(error, allData) {
                 value: p.year,
                     radius: (x(d.x1)-x(d.x0))/4.5}
         }))
+        //add the circles!!
         .enter()
         .append("circle")
         .attr("class", "enter")
@@ -85,10 +87,7 @@ d3.csv(dataFile, function(error, allData) {
             return -1*(- i * 2.3 * d.radius - d.radius)})
         .attr("r", d => d.radius)
         .on("mouseover", tooltipon)
-        .on('mouseout', function () {
-            d3.select(this)
-                .style("fill", "lightblue");
-        });
+        .on('mouseout', tooltipoff);
         //add x axis on top
         chart0G.append("g")
             .attr("class", "axis axis--x")
@@ -97,20 +96,31 @@ d3.csv(dataFile, function(error, allData) {
 
 });
 
+//hover functionality
 function tooltipon(d){
     let gParent = d3.select(this.parentElement)
     let translateValue = gParent.attr("transform")
   
     let gX = translateValue.split(",")[0].split("(")[1]
-    let gY = height + (+d3.select(this).attr("cy")-10)
+    let gY = height + (+d3.select(this).attr("cy")-5)
 
     d3.select(this)
         .classed("selected", true)
+        .style("fill", "purple");
     tooltip.transition()
         .duration(200)
         .style("opacity", .9);
-    tooltip.html(d.name + "<br/> " + d.value + "")
-        .style("left", gX + "px")
-        .style("top", gY + "px");
-
+    tooltip.html(d.name + "<br/> (" + d.value + ")")
+        .style("left", d3.event.pageX + "px")
+        .style("top", (d3.event.pageY - 35) + "px");
 }
+
+//hover functionality
+function tooltipoff(d) {
+    d3.select(this)
+        .classed("selected", false)
+        .style("fill", "lightblue");
+      tooltip.transition()
+           .duration(500)
+           .style("opacity", 0);
+  }//tooltipOff
