@@ -1,4 +1,3 @@
-
 #main {
     padding: 20px;
 }
@@ -10,15 +9,6 @@ text.label {
     font-family: sans-serif;
 }
 
-/* center the svg in the middle */
-.chart0G{
-  display: block;
-  margin: 0 auto;
-  position: absolute;
-  top: calc(50% - 24px);
-  left: calc(50% - 24px);
-
-}
 .bar2 {
       fill: red;
     }
@@ -56,4 +46,20 @@ div.tooltip {
   border: 0px;
   border-radius: 8px;
   pointer-events: none;
+}
+/* center the svg in the middle */
+.chart0G{
+  display: block;
+  margin: 0 auto;
+  position: absolute;
+  top: calc(50% - 24px);
+  left: calc(50% - 24px);
+
+}
+#chart3{
+  position: fixed;
+  right: 250px;
+  float: right;
+  width: 300px;
+
 }

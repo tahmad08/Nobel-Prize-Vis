@@ -19,7 +19,7 @@ var chart0G = d3.select("#chart0")
     .attr("height", height0)
     .append("g")
     .attr("transform",
-                `translate(50,400)`);
+                `translate(50,300)`);
 
 //tooltip
 const tooltip = d3.select("#chart0")
@@ -44,7 +44,8 @@ d3.csv(dataFile, function(error, allData) {
     //append what we need to the array allDate
     allData.forEach(function(d) {
         d.fullname = d.fullname
-        d.year = +d.year;
+        d.year = +d.year
+        d.motivation = d.motivation;
     });
 
     //histogram binning
@@ -70,6 +71,9 @@ d3.csv(dataFile, function(error, allData) {
         .data(d => d.map((p, i) => {
             return {
                 name: p.fullname,
+                motiv: p.motivation,
+                age: p.age,
+                categ: p.category,
                 value: p.year,
                     radius: (x(d.x1)-x(d.x0))/4.5}
         }))
@@ -86,6 +90,12 @@ d3.csv(dataFile, function(error, allData) {
         .attr("cy", (d, i) => {
             return -1*(- i * 2.3 * d.radius - d.radius)})
         .attr("r", d => d.radius)
+        .on("click", function(d){
+            document.querySelector('#nameO').value = d.name;
+			document.querySelector('#ageO').value = d.age;
+			document.querySelector('#motivationO').value = d.motiv;
+			document.querySelector('#categoryO').value = d.categ;
+        })
         .on("mouseover", tooltipon)
         .on('mouseout', tooltipoff);
         //add x axis on top
