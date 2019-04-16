@@ -61,5 +61,15 @@ div.tooltip {
   right: 250px;
   float: right;
   width: 300px;
-
+  font-family: Futura;
+  font: 19px sans-serif ;
+}
+#chart1{
+  position: fixed;
+  left: 250px;
+  float: left;
+  width: 325px;
+  height: 375px;
+  font-family: Futura;
+  font: 19px sans-serif ;
 }

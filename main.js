@@ -1,10 +1,10 @@
 //width0 and height0 are for the actual svg
 var width0 = 1300;
-var height0 = 1100;
+var height0 = 800;
 
 //width and height are for the graph to use itself. 
 //i could do margins? but nah
-var width = 1200;
+var width = 1250;
 var height = 400;
 
 //made the x 
@@ -19,7 +19,7 @@ var chart0G = d3.select("#chart0")
     .attr("height", height0)
     .append("g")
     .attr("transform",
-                `translate(50,300)`);
+                `translate(50,400)`);
 
 //tooltip
 const tooltip = d3.select("#chart0")
@@ -47,7 +47,7 @@ d3.csv(dataFile, function(error, allData) {
         d.year = +d.year
         d.motivation = d.motivation;
     });
-
+    categoryChart();
     //histogram binning
     const histogram = d3.histogram()
         .domain(x.domain())
@@ -73,6 +73,7 @@ d3.csv(dataFile, function(error, allData) {
                 name: p.fullname,
                 motiv: p.motivation,
                 age: p.age,
+                bornin: p.born_city + ", " + p.born_country,
                 categ: p.category,
                 value: p.year,
                     radius: (x(d.x1)-x(d.x0))/4.5}
@@ -93,6 +94,7 @@ d3.csv(dataFile, function(error, allData) {
         .on("click", function(d){
             document.querySelector('#nameO').value = d.name;
 			document.querySelector('#ageO').value = d.age;
+			document.querySelector('#borninO').value = d.bornin;
 			document.querySelector('#motivationO').value = d.motiv;
 			document.querySelector('#categoryO').value = d.categ;
         })
@@ -134,3 +136,106 @@ function tooltipoff(d) {
            .duration(500)
            .style("opacity", 0);
   }//tooltipOff
+
+function categoryChart(){
+    
+// **** Your JavaScript code goes here ****
+var data_arr;
+var svg = d3.select("#main").select("svg");
+var width = 760;
+var height = 600;
+d3.csv("nobel_laureates.csv", function(dataset){
+    data_arr = dataset;
+    categoryPlot(data_arr);
+
+});
+
+
+
+function categoryPlot(data_arr) {
+
+    //setting up chart container
+    var chart1G = d3.select("#chart1")
+    	                .append("svg:svg")
+    	                .attr("width",width)
+    	                .attr("height",height)
+                        .append('g');
+
+    //rollup of nobel categories
+    var category = d3.nest()
+        .key(function (d) {return d.category;})
+        .rollup(function(v) { return v.length; })
+        .entries(data_arr)
+        console.log(JSON.stringify(category)); //prints the arrays with values
+
+    //setting up axes of the chart
+    var x = d3.scaleBand()
+        .domain(category.map(function (d) { return d.key }))
+        .range([0, width/2 - 100])
+
+
+    var extent = d3.extent(category, function(d) {return d.value})
+
+
+    var y = d3.scaleLinear()
+        .domain([0, extent[1] + 10])
+        .range([height, 300])
+    //setting up the colors
+    function colorPicker(cat) {
+        if (cat == "chemistry") {
+            return "#f2db48" //minion yellow
+        } else if (cat == "literature") {
+            return "#c97064" //red
+        } else if (cat == "medicine") {
+            return "#bca371" //wood brown
+        } else if (cat == "peace") {
+            return "#a6b07e" //sand (sage)
+        } else if (cat == "physics") {
+            return "#68a357" //russian green
+        } else if (cat == "economics") {
+            return "#32965d"  //sea green
+        }
+        return "#ffffff";
+    }
+
+
+    //drawing the bars
+    chart1G.selectAll()
+        .data(category)
+        .enter()
+        .append("rect")
+        .attr("class", "bar")
+        .attr("x", function (d) { return x(d.key) + 50})
+        .attr("y", function(d) {return y(d.value) - 275})
+        .attr("width", 20)
+        .attr("height", function (d) { return height - y(d.value) })
+        //coloring the bar
+        .attr("fill", function (d) {return colorPicker(d.key) } )
+    chart1G.append('g').attr('class', 'xaxis')
+            .attr("transform", "translate (40, 325)")
+            .call(d3.axisBottom(x))
+
+    chart1G.append('g').attr('class', 'y axis')
+            .attr("transform", "translate (40, -275)")
+            .call(d3.axisLeft(y))
+
+
+     //setting up axes of the chart
+    var x0 = d3.scaleBand()
+        .domain(category.map(function (d) { return d.key }))
+        .range([0, width/2 - 100])
+
+
+    var extent0 = d3.extent(category, function(d) {return d.value})
+
+    var y0 = d3.scaleLinear()
+        .domain([0, extent0[1] + 10])
+        .range([height, 300])
+
+
+}
+
+
+
+
+  }
