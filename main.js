@@ -3,13 +3,14 @@ CTRL + F "TODO" AND FINISH
 ( ) the timeline axis needs a label
         (X) timeline axis ticks should NOT have commas
 (X) try to make the category chart into a pie chart
-( ) link the category chart to the timeline
-( ) make the country/gender sideways bar chart
+(X) link the category chart to the timeline
+( ) make 2nd chart
 ( ) also add a brush that if you highlight certain dots,
     it returns stats (right below the name, age... detail) such as:
     range of years highlighted, total # of prizes
     most common category in those years, etc
 ( ) fix position of the svg elements
+(X) placeholder text for the pie chart in the center should say "categories"
  */
 
  //call to make the category chart
@@ -148,9 +149,7 @@ d3.csv(dataFileName, function(error, allData) {
             .attr("transform", "translate(0," + 20 + ")")
             .call(d3.axisTop(x)
                 .tickFormat(d3.format("d")));
-            // .tickFormat(axisFormatLocale.format(''));
 
-            // var xAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(d3.format("d"));
 });
 
 //date formating ATTEMPT TODO change the lived from YYYY-MM-DD TO Month Day, YYYY
@@ -181,7 +180,7 @@ function tooltipon(d){
     d3.select(this)
         .classed("selected", true)
         //COLORFIX when hovering
-        //.style("fill", "purple");
+        .style("stroke", "red");
     tooltip.transition()
         .duration(200)
         .style("opacity", .9);
@@ -195,11 +194,11 @@ function tooltipoff(d) {
     d3.select(this)
         .classed("selected", false)
         //COLORFIX it goes back to when you stop hovering
-        //.style("fill", "lightblue");
+        .style("stroke", "none");
       tooltip.transition()
            .duration(500)
            .style("opacity", 0);
-  }//tooltipOff
+  }
 
 
 
@@ -221,8 +220,8 @@ function pieCategory(){
     var econP = 8.630609896;
 
     //COLORFIX
-    var color = d3.scaleOrdinal(d3.schemeCategory20c);
-        // .range(["#f2db48", "#c97064", "#bca371", "#a6b07e", "#68a357", "#32965d"]);
+    var color = d3.scaleOrdinal()
+        .range(["#f2db48", "#c97064", "#bca371", "#a6b07e", "#68a357", "#32965d"]);
 
     //TODO change the names so they're capitalized
     var dataSet = [
@@ -234,11 +233,25 @@ function pieCategory(){
         {name: "economics", value: econP}];
 
     var datum = [chemP, litP, medP, peaP, physP, econP];
+    var colorSet = d3.map({"chemistry": "#f2db48", "literature": "#c97064",
+            "medicine": "#bca371", "peace": "#a6b07e", "physics": "#68a357",
+            "economics": "#32965d"});
+
+        console.log(colorSet);
+
+    // var colorSet = d3.map([{name: "chemistry", value: "#f2db48"},
+    //     {name: "literature", value: "#c97064"},
+    //     {name: "medicine", value: "#bca371"},
+    //     {name: "peace", value: "#a6b07e"},
+    //     {name: "physics", value: "#68a357"},
+    //     {name: "economics", value: "#32965d"}],
+    //     function(d) {
+    //         return d.value;
+    //     });
 
     var svg = d3.select("#chart1")
         .append("svg:svg") //create the SVG element inside the <body>
         .attr("class", "pie")
-        // .data([dataSet]) //associate our data with the document
         .attr("width", width0) //set the width of the canvas
         .attr("height", height0); //set the height of the canvas
 
@@ -271,36 +284,23 @@ function pieCategory(){
 
             g.append("text")
                 .attr("class", "value-text")
-                //TODO change the percents so the numbers aren't so long,
-                //maybe only 1 decimal place? below
-                .text(`${d.data.value + "%"}`)
+                .text((`${d.data.value}`.substring(0,5)) + "%")
+                .style("fill", colorSet.get(d.data.name))
                 .attr('text-anchor', 'middle')
                 .attr('dy', '.6em');
 
-            //selects all the circles in the category selected and highlights them
-            // d3.selectAll('.' + d.data.name).style("fill", "orange");
             })
         .on("click", function(d){
             //selects all the circles in the category selected and highlights them
-            if (d.category = "physics") {
-                d3.selectAll('.' + d.data.name)
-                .classed("physics-selected", true);
-                //.style("fill", "orange");
-            }
-            d3.selectAll('.' + d.data.name)
-            .classed("selected", true);
-            //.style("fill", "orange");
+            d3.selectAll('.' + d.data.name).style("fill", colorSet.get(d.data.name)); 
         })
         .on("mouseout", function(d) {
             d3.select(this)
-                .classed("physics-selected", true)
-                .classed("selected", false)
-                //.style("cursor", "none")
-                //.style("fill", color(this._current))
+                .style("cursor", "none")
+                .style("fill", colorSet.get(d.data.name))
                 .select(".text-group").remove();
 
-            //colorfix
-            d3.selectAll('.' + d.data.name).style("fill", "lightblue");
+            d3.selectAll('.' + d.data.name).style("fill", "lightgrey");
             })
         .append('path')
         .attr('d', arc)
@@ -317,10 +317,16 @@ function pieCategory(){
                 .style("cursor", "none")
                 .classed("hovered", false)
                 .classed("selected", false)
-                .classed("physics-selected", false);
+                // .classed("physics-selected", false);
                 //.style("fill", color(this._current));
             })
         .each(function(d, i) { this._current = i; });
+
+        g.append("text")
+            .attr("text-anchor", "middle")
+            .attr('dy', '-3.5em')
+            .attr("id", "placeholder")
+            .text("Category")
 
         g.append('text')
             .attr('text-anchor', 'middle')
