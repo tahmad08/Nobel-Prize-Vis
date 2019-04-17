@@ -60,9 +60,10 @@ div.tooltip {
 }
 #chart3{
   position: fixed;
-  right: 250px;
+  right: 200px;
   float: right;
-  width: 300px;
+  width: 400px;
+  height: 200px;
   font-family: Futura;
   font: 15px sans-serif ;
 }
@@ -87,7 +88,7 @@ div.tooltip {
 }
 
 .selected {
-	stroke: red;
+	/* stroke: red; */
 	fill:red;
 }
 
@@ -99,3 +100,4 @@ div.tooltip {
 	stroke: "#68a357";
 	fill:"#68a357";
 }
+

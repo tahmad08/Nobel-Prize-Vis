@@ -152,7 +152,7 @@ d3.csv(dataFileName, function(error, allData) {
 
 });
 
-//date formating ATTEMPT TODO change the lived from YYYY-MM-DD TO Month Day, YYYY
+//date formating TODO change the lived from YYYY-MM-DD TO Month Day, YYYY
 function datef(d){
     // console.log(d);
     var origDate = d;
@@ -163,6 +163,7 @@ function datef(d){
     // var date = format.parse(string);
     // // output the date object as a string based on the format:
     // console.log(format(date));
+    //man, fuc dem stupid ass dates how tf does this work
     // // use the desired format
     // var format1 = d3.time.format("%B %d, %Y");
     // // output a date as a string in the desired format
@@ -180,7 +181,7 @@ function tooltipon(d){
     d3.select(this)
         .classed("selected", true)
         //COLORFIX when hovering
-        .style("stroke", "red");
+        // .style("stroke", "red");
     tooltip.transition()
         .duration(200)
         .style("opacity", .9);
@@ -194,7 +195,7 @@ function tooltipoff(d) {
     d3.select(this)
         .classed("selected", false)
         //COLORFIX it goes back to when you stop hovering
-        .style("stroke", "none");
+        // .style("stroke", "none");
       tooltip.transition()
            .duration(500)
            .style("opacity", 0);
@@ -292,7 +293,17 @@ function pieCategory(){
             })
         .on("click", function(d){
             //selects all the circles in the category selected and highlights them
-            d3.selectAll('.' + d.data.name).style("fill", colorSet.get(d.data.name)); 
+            // var currClass = d3.selectAll('.' + d.data.name).attr("class");
+            // console.log(currClass);
+            var col = d3.selectAll('.' + d.data.name).style("fill");
+            var curr = (col == d3.rgb(211,211,211));
+            if(curr){
+                d3.selectAll('.' + d.data.name).style("fill", colorSet.get(d.data.name)); 
+            } else {
+                d3.selectAll('.' + d.data.name).style("fill", d3.rgb(211,211,211)); 
+            }
+            // d3.select(this).style('fill')
+            
         })
         .on("mouseout", function(d) {
             d3.select(this)
@@ -300,7 +311,7 @@ function pieCategory(){
                 .style("fill", colorSet.get(d.data.name))
                 .select(".text-group").remove();
 
-            d3.selectAll('.' + d.data.name).style("fill", "lightgrey");
+            // d3.selectAll('.' + d.data.name).style("fill", "lightgrey");
             })
         .append('path')
         .attr('d', arc)
