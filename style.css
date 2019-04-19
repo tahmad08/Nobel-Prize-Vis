@@ -52,15 +52,23 @@ div.tooltip {
 /* center the svg in the middle */
 .chart0G{
   display: block;
-  margin: 0 auto;
-  position: absolute;
-  top: calc(50% - 24px);
-  left: calc(50% - 24px);
+  position: relative;
+  z-index: 200;
 
+  /* margin: 0 auto;
+  position: relative;
+  top: calc(50% - 24px);
+  left: calc(50% - 24px); */
 }
+#chart0{
+  position: relative;
+  top:400px;
+  width: 1300px;
+  height: 600px;
+}
+
 #chart3{
-  position: fixed;
-  right: 200px;
+  position: relative;
   float: right;
   width: 400px;
   height: 200px;
@@ -68,19 +76,17 @@ div.tooltip {
   font: 15px sans-serif ;
 }
 #chart1{
-  position: fixed;
-  left: 250px;
+  position: relative;
   float: left;
   width: 400px;
   height: 400px;
+  margin: 0px;
   font-family: Futura;
   font: 19px sans-serif ;
 }
 #chart2{
-  position: fixed;
-  left: 1000px;
-  right: 250px;
-  float: center;
+  position: relative;
+  float: left;
   width: 325px;
   height: 375px;
   font-family: Futura;
@@ -96,8 +102,4 @@ div.tooltip {
     opacity: 0.4
 }
 
-.physics-selected {
-	stroke: "#68a357";
-	fill:"#68a357";
-}
 

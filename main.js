@@ -26,27 +26,28 @@ var height0 = 800;
 var width = 1250;
 var height = 400;
 
-
+var clicked;
 //made the x
 var x = d3.scaleLinear()
     .rangeRound([0, width])
     .domain([1895, 2018]);
 
-
 //create the svg and append it, translated halfway down the screen
-var chart0G = d3.select("#chart0")
+var chart0G = d3.select("#body")
     .append("svg:svg")
-    .attr("width", width0)
-    .attr("height", height0)
+    .attr("width", width)
+    .attr("height", height)
     .append("g")
     .attr("transform",
-                `translate(40,450)`);
+                `translate(0,30)`)
+                ;
 
 //tooltip
-const tooltip = d3.select("#chart0")
+const tooltip = d3.select("#body")
     .append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
+    
 const t = d3.transition()
     .duration(1000);
 
@@ -132,12 +133,6 @@ d3.csv(dataFileName, function(error, allData) {
             .text(d.motiv)
             d3.select('#category')
             .text(d.categ)
-            // document.querySelector('#nameO').value = d.name;
-            // document.querySelector('#ageO').value = d.age;
-			// document.querySelector('#bornfromO').value = d.bornfrom;
-			// document.querySelector('#borninO').value = d.bornin;
-			// document.querySelector('#motivationO').value = d.motiv;
-			// document.querySelector('#categoryO').value = d.categ;
         })
         .on("mouseover", tooltipon)
         .on('mouseout', tooltipoff);
@@ -186,7 +181,7 @@ function tooltipon(d){
         .duration(200)
         .style("opacity", .9);
     tooltip.html(d.name + "<br/> (" + d.value + ")")
-        .style("left", d3.event.pageX + "px")
+        .style("left", (d3.event.pageX + 10) + "px")
         .style("top", (d3.event.pageY - 35) + "px");
 }
 
@@ -238,23 +233,12 @@ function pieCategory(){
             "medicine": "#bca371", "peace": "#a6b07e", "physics": "#68a357",
             "economics": "#32965d"});
 
-        console.log(colorSet);
-
-    // var colorSet = d3.map([{name: "chemistry", value: "#f2db48"},
-    //     {name: "literature", value: "#c97064"},
-    //     {name: "medicine", value: "#bca371"},
-    //     {name: "peace", value: "#a6b07e"},
-    //     {name: "physics", value: "#68a357"},
-    //     {name: "economics", value: "#32965d"}],
-    //     function(d) {
-    //         return d.value;
-    //     });
-
     var svg = d3.select("#chart1")
         .append("svg:svg") //create the SVG element inside the <body>
         .attr("class", "pie")
         .attr("width", width0) //set the width of the canvas
-        .attr("height", height0); //set the height of the canvas
+        .attr("height", height0)
+                ; //set the height of the canvas
 
     var g = svg.append('g')
         .attr('transform', 'translate(' + (width0/2) + ',' + (height0/2) + ')');
@@ -289,6 +273,9 @@ function pieCategory(){
                 .style("fill", colorSet.get(d.data.name))
                 .attr('text-anchor', 'middle')
                 .attr('dy', '.6em');
+            
+            d3.selectAll('.' + d.data.name).style("fill", colorSet.get(d.data.name)); 
+            clicked = false;
 
             })
         .on("click", function(d){
@@ -297,10 +284,11 @@ function pieCategory(){
             // console.log(currClass);
             var col = d3.selectAll('.' + d.data.name).style("fill");
             var curr = (col == d3.rgb(211,211,211));
-            if(curr){
+            if(curr && !clicked){
                 d3.selectAll('.' + d.data.name).style("fill", colorSet.get(d.data.name)); 
             } else {
-                d3.selectAll('.' + d.data.name).style("fill", d3.rgb(211,211,211)); 
+                d3.selectAll('.' + d.data.name).style("fill", "lightgrey"); 
+                clicked = false;
             }
             // d3.select(this).style('fill')
             
@@ -310,8 +298,9 @@ function pieCategory(){
                 .style("cursor", "none")
                 .style("fill", colorSet.get(d.data.name))
                 .select(".text-group").remove();
-
-            // d3.selectAll('.' + d.data.name).style("fill", "lightgrey");
+            if(!clicked){
+                d3.selectAll('.' + d.data.name).style("fill", "lightgrey");
+            }
             })
         .append('path')
         .attr('d', arc)
