@@ -33,21 +33,18 @@ var x = d3.scaleLinear()
     .domain([1895, 2018]);
 
 //create the svg and append it, translated halfway down the screen
-var chart0G = d3.select("#body")
+var chart0G = d3.select("#chart4")
     .append("svg:svg")
     .attr("width", width)
     .attr("height", height)
     .append("g")
-    .attr("transform",
-                `translate(0,30)`)
-                ;
 
 //tooltip
 const tooltip = d3.select("#body")
     .append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
-    
+
 const t = d3.transition()
     .duration(1000);
 
@@ -71,7 +68,7 @@ d3.csv(dataFileName, function(error, allData) {
         //d.year = d3.time.format("%Y-%m-%d").parse(d.year)
         //parseData(d.year);
         d.motivation = d.motivation;
-        if (d.died = "0000-00-00") {
+        if (d.died == "0000-00-00") {
              d.died = "Present"
         }
     });
@@ -189,9 +186,7 @@ function tooltipon(d){
 function tooltipoff(d) {
     d3.select(this)
         .classed("selected", false)
-        //COLORFIX it goes back to when you stop hovering
-        // .style("stroke", "none");
-      tooltip.transition()
+        tooltip.transition()
            .duration(500)
            .style("opacity", 0);
   }
@@ -199,21 +194,23 @@ function tooltipoff(d) {
 
 
 function pieCategory(){
-    var svg = d3.select("#chart1").select("svg");
+    var svg = d3.select("#chart1")
+    .select("svg")
+    ;
     var width0 = 400;
     var height0 = 400;
-    var oRad = 125;
-    var iRad = 75;
-    var thick = 25;
+    var oRad = 70;
+    var iRad = 60;
+    var thick = 6;
     var text = "";
-    var rad = 200;
+    var rad = 130;
 
-    var chemP = 19.56271577;
-    var litP = 12.88837745;
-    var medP = 24.16570771;
-    var peaP = 11.73762946;
-    var physP = 23.01495972;
-    var econP = 8.630609896;
+    var chemP = 19.6;
+    var litP = 12.9;
+    var medP = 24.2;
+    var peaP = 11.7;
+    var physP = 23.1;
+    var econP = 08.6;
 
     //COLORFIX
     var color = d3.scaleOrdinal()
@@ -241,7 +238,7 @@ function pieCategory(){
                 ; //set the height of the canvas
 
     var g = svg.append('g')
-        .attr('transform', 'translate(' + (width0/2) + ',' + (height0/2) + ')');
+        .attr('transform', 'translate(' + (width0/2) + ',' + (height0/2 ) + ')');
     var arc = d3.arc()
         .innerRadius(rad - thick)
         .outerRadius(oRad);
@@ -256,39 +253,44 @@ function pieCategory(){
         .append("g")
         .on("mouseover", function(d) {
               let g = d3.select(this)
-                //.style("cursor", "pointer")
-                //.style("fill", "lightblue")
                 .append("g")
-                .attr("class", "text-group");
+                .attr("class", "text-group"); //clears value each time
 
             g.append("text")
                 .attr("class", "label")
                 .text(`${d.data.name}`)
-                .attr('text-anchor', 'middle')
-                .attr('dy', '-1.0em')
-                .style("font-size","25px");
+                .style('text-align', 'center')
+                // .attr('text-anchor', 'right')
+                .attr('dy', '1.0em')
+                .attr('dx', '-2.0em')
+                .style("font-family","Arial")
+                .style("font-size","15px");
+
+                // .style("font-size","25px");
 
             g.append("text")
                 .attr("class", "value-text")
-                .text((`${d.data.value}`.substring(0,5)) + "%")
+                .text(`${d.data.value}` + "%")
                 .style("fill", colorSet.get(d.data.name))
-                .attr('text-anchor', 'middle')
-                .attr('dy', '.6em')
-                .style("font-size","25px");
-            
+                .style('text-align', 'center')
+                .attr('dx', '-1.0em')
+                .style("font-family","Arial")
+                .style("font-size","20px");
+                // .style("font-size","25px");
+
 
             })
-        .on("click", function(d){
-            //selects all the circles in the category selected and highlights them
-            // var currClass = d3.selectAll('.' + d.data.name).attr("class");
-            // console.log(currClass);
-            var col = d3.selectAll('.' + d.data.name).style("fill");
-            var curr = (col == d3.rgb(211,211,211));
-            d3.selectAll('.' + d.data.name).style("fill", colorSet.get(d.data.name)); 
-            clicked = true;
-            //todo: add a button that clears the chart
-            
-        })
+        // .on("click", function(d){
+        //     //selects all the circles in the category selected and highlights them
+        //     // var currClass = d3.selectAll('.' + d.data.name).attr("class");
+        //     // console.log(currClass);
+        //     var col = d3.selectAll('.' + d.data.name).style("fill");
+        //     var curr = (col == d3.rgb(211,211,211));
+        //     d3.selectAll('.' + d.data.name).style("fill", colorSet.get(d.data.name));
+        //     clicked = true;
+        //     //todo: add a button that clears the chart
+        //
+        // })
         .on("mouseout", function(d) {
             d3.select(this)
                 .style("cursor", "none")
@@ -304,7 +306,7 @@ function pieCategory(){
             d3.select(this)
                 .style("cursor", "pointer")
                 .classed("hovered", true);
-                d3.selectAll('.' + d.data.name).style("fill", colorSet.get(d.data.name)); 
+                d3.selectAll('.' + d.data.name).style("fill", colorSet.get(d.data.name));
                 //COLORFIX do we want the hover color to be black
                 //.style("fill", "lightgrey");
             })
@@ -314,7 +316,7 @@ function pieCategory(){
                 .classed("hovered", false)
                 .classed("selected", false)
                 if(!clicked){
-                    d3.selectAll('.' + d.data.name).style("fill", "lightgrey"); 
+                    d3.selectAll('.' + d.data.name).style("fill", "lightgrey");
                 }
 
                 // .classed("physics-selected", false);
@@ -323,10 +325,14 @@ function pieCategory(){
         .each(function(d, i) { this._current = i; });
 
         g.append("text")
-            .attr("text-anchor", "middle")
-            .attr('dy', '-3.5em')
-            .attr("id", "placeholder")
+            //.attr("text-anchor", "center")
+            .attr('dy', '-6em')
+            .attr('dx', '-2em')
+            .attr("id", "graphlabel")
             .text("Category")
+            .style("font-family", "Arial")
+            .style("font-weight", "bold")
+            .style("font-size", "25px");
 
         g.append('text')
             .attr('text-anchor', 'middle')

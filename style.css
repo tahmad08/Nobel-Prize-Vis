@@ -2,11 +2,14 @@
     padding: 20px;
 }
 
+p {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 text.label {
-    text-anchor: middle;
+    text-anchor: top;
     font-size: 11px;
     fill: #555;
-    font-family: sans-serif;
 }
 
 .bar2 {
@@ -23,16 +26,20 @@ text.label {
 }
 
 text.title {
-    text-anchor: middle;
-    font-size: 14px;
+    text-anchor: top;
+    font-size: 40px;
     fill: #333;
 }
 circle {
-  /*opacity: .6;*/
-  /* COLOR */
   fill: lightgrey;
-  stroke: lightgrey;
+}
 
+.selected {
+	fill:red;
+}
+
+.hovered {
+    opacity: 0.4
 }
 
 div.tooltip {
@@ -60,6 +67,7 @@ div.tooltip {
   top: calc(50% - 24px);
   left: calc(50% - 24px); */
 }
+
 #chart0{
   position: relative;
   top:400px;
@@ -70,36 +78,31 @@ div.tooltip {
 #chart3{
   position: relative;
   float: right;
+  margin-right: 20px;
+  padding-right: 20px;
+  bottom: -100px;
   width: 400px;
-  height: 200px;
-  font-family: Futura;
-  font: 15px sans-serif ;
+  height: 400px;
+  font-family: Arial;
 }
+
+
 #chart1{
   position: relative;
   float: left;
   width: 400px;
   height: 400px;
   margin: 0px;
-  font-family: Futura;
-  font: 19px sans-serif ;
 }
+
 #chart2{
   position: relative;
   float: left;
   width: 325px;
   height: 375px;
-  font-family: Futura;
-  font: 19px sans-serif ;
 }
 
-.selected {
-	/* stroke: red; */
-	fill:red;
+#heading {
+    font-family: Arial;
+    text-align: center;
 }
-
-.hovered {
-    opacity: 0.4
-}
-
-
