@@ -265,14 +265,16 @@ function pieCategory(){
                 .attr("class", "label")
                 .text(`${d.data.name}`)
                 .attr('text-anchor', 'middle')
-                .attr('dy', '-1.2em');
+                .attr('dy', '-1.0em')
+                .style("font-size","25px");
 
             g.append("text")
                 .attr("class", "value-text")
                 .text((`${d.data.value}`.substring(0,5)) + "%")
                 .style("fill", colorSet.get(d.data.name))
                 .attr('text-anchor', 'middle')
-                .attr('dy', '.6em');
+                .attr('dy', '.6em')
+                .style("font-size","25px");
             
 
             })
