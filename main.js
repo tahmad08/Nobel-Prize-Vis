@@ -67,6 +67,7 @@ d3.csv(dataFileName, function(error, allData) {
     allData.forEach(function(d) {
         d.fullname = d.fullname
         d.year = +d.year
+        d.category = d.category
         //d.year = d3.time.format("%Y-%m-%d").parse(d.year)
         //parseData(d.year);
         d.motivation = d.motivation;
@@ -175,12 +176,11 @@ function tooltipon(d){
 
     d3.select(this)
         .classed("selected", true)
-        //COLORFIX when hovering
-        // .style("stroke", "red");
+
     tooltip.transition()
         .duration(200)
         .style("opacity", .9);
-    tooltip.html(d.name + "<br/> (" + d.value + ")")
+    tooltip.html(d.name + "<br/> " + d.value + "" + "<br/> " + d.categ + "")
         .style("left", (d3.event.pageX + 10) + "px")
         .style("top", (d3.event.pageY - 35) + "px");
 }
@@ -274,8 +274,6 @@ function pieCategory(){
                 .attr('text-anchor', 'middle')
                 .attr('dy', '.6em');
             
-            d3.selectAll('.' + d.data.name).style("fill", colorSet.get(d.data.name)); 
-            clicked = false;
 
             })
         .on("click", function(d){
@@ -284,13 +282,9 @@ function pieCategory(){
             // console.log(currClass);
             var col = d3.selectAll('.' + d.data.name).style("fill");
             var curr = (col == d3.rgb(211,211,211));
-            if(curr && !clicked){
-                d3.selectAll('.' + d.data.name).style("fill", colorSet.get(d.data.name)); 
-            } else {
-                d3.selectAll('.' + d.data.name).style("fill", "lightgrey"); 
-                clicked = false;
-            }
-            // d3.select(this).style('fill')
+            d3.selectAll('.' + d.data.name).style("fill", colorSet.get(d.data.name)); 
+            clicked = true;
+            //todo: add a button that clears the chart
             
         })
         .on("mouseout", function(d) {
@@ -298,9 +292,8 @@ function pieCategory(){
                 .style("cursor", "none")
                 .style("fill", colorSet.get(d.data.name))
                 .select(".text-group").remove();
-            if(!clicked){
-                d3.selectAll('.' + d.data.name).style("fill", "lightgrey");
-            }
+            var c = d3.selectAll('.' + d.data.name);
+            c.classed("hovered", false);
             })
         .append('path')
         .attr('d', arc)
@@ -309,6 +302,7 @@ function pieCategory(){
             d3.select(this)
                 .style("cursor", "pointer")
                 .classed("hovered", true);
+                d3.selectAll('.' + d.data.name).style("fill", colorSet.get(d.data.name)); 
                 //COLORFIX do we want the hover color to be black
                 //.style("fill", "lightgrey");
             })
@@ -317,6 +311,10 @@ function pieCategory(){
                 .style("cursor", "none")
                 .classed("hovered", false)
                 .classed("selected", false)
+                if(!clicked){
+                    d3.selectAll('.' + d.data.name).style("fill", "lightgrey"); 
+                }
+
                 // .classed("physics-selected", false);
                 //.style("fill", color(this._current));
             })
