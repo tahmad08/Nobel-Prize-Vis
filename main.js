@@ -14,7 +14,6 @@ CTRL + F "TODO" AND FINISH
  */
 
  //call to make the category chart
-// categoryChart();
 ageChart();
 pieCategory();
 
@@ -66,8 +65,6 @@ d3.csv(dataFileName, function(error, allData) {
         d.fullname = d.fullname
         d.year = +d.year
         d.category = d.category
-        //d.year = d3.time.format("%Y-%m-%d").parse(d.year)
-        //parseData(d.year);
         d.motivation = d.motivation
         if (d.died == "0000-00-00") {
              d.died = "Present"
@@ -175,7 +172,7 @@ function tooltipon(d){
 
     d3.select(this)
         .classed("selected", true)
-
+        .style("fill", "red");
     tooltip.transition()
         .duration(200)
         .style("opacity", .9);
@@ -189,7 +186,7 @@ function tooltipoff(d) {
     d3.select(this)
         .classed("selected", false)
         //COLORFIX it goes back to when you stop hovering
-        // .style("stroke", "none");
+        .style("fill", "lightgrey");
       tooltip.transition()
            .duration(500)
            .style("opacity", 0);
@@ -365,8 +362,8 @@ function ageChart(){
     var data_arr;
     var svg = d3.select("#chart2").select("svg");
     //w/h of actual svg so no overlap
-    var width0 = 800;
-    var height0 = 600;
+    var width0 = 400;
+    var height0 = 400;
     //w/h given to chart so it formats nicely :)
     var width = 760;
     var height = 550;
