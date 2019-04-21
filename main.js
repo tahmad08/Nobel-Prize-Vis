@@ -15,6 +15,7 @@ CTRL + F "TODO" AND FINISH
 
  //call to make the category chart
 // categoryChart();
+ageChart();
 pieCategory();
 
 //width0 and height0 are for the actual svg
@@ -40,7 +41,7 @@ var chart0G = d3.select("#chart4")
     .append("g")
 
 //tooltip
-const tooltip = d3.select("#body")
+const tooltip = d3.select("#chart4")
     .append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
@@ -359,101 +360,144 @@ function pieCategory(){
 }
 
 
-function categoryChart(){
-    // **** Your JavaScript code goes here ****
+function ageChart(){
     var data_arr;
-    //CHANGED: d3.select("#main") to d3.select("#chart1")
-    var svg = d3.select("#chart1").select("svg");
+    var svg = d3.select("#chart2").select("svg");
     //w/h of actual svg so no overlap
-    var width0 = 325;
-    var height0 = 375;
+    var width0 = 800;
+    var height0 = 600;
     //w/h given to chart so it formats nicely :)
     var width = 760;
-    var height = 600;
+    var height = 550;
     d3.csv("nobel_laureates.csv", function(dataset){
         data_arr = dataset;
-        categoryPlot(data_arr);
+        agePlot(data_arr);
 
     });
 
-    function categoryPlot(data_arr) {
+    function agePlot(data_arr) {
 
         //setting up chart container
-        var chart1G = d3.select("#chart1")
-                            .append("svg:svg")
-                            .attr("width",width0)
-                            .attr("height",height0)
-                            .append('g');
+        var chart2G = d3.select("#chart2")
+            .append("svg:svg")
+            .attr("width",width0)
+            .attr("height",height0)
+            .append('g');
 
-        //rollup of nobel categories
-        var category = d3.nest()
-            .key(function (d) {return d.category;})
+        //rollup of ages
+        var ages = d3.nest()
+            .key(function (d) {return (Math.floor(d.age/10) * 10 + "s");})
+            //.entries(function (d) {return d.age;})
             .rollup(function(v) { return v.length; })
-            .entries(data_arr)
-            console.log(JSON.stringify(category)); //prints the arrays with values
+
+            .entries(data_arr);
+            console.log(JSON.stringify(ages)); //prints the arrays with values
+
 
         //setting up axes of the chart
         var x = d3.scaleBand()
-            .domain(category.map(function (d) { return d.key }))
+            .domain(ages.map(function (d) { return d.key }))
             .range([0, width/2 - 100])
+        console.log(ages.map(function (d) { return d.key }));
 
+        // var ages2 = d3.nest()
+        //     .key(ages.key)
+        //     .rollup(function(v) { return v.length; })
+        //     .entries(data_arr);
+        //
+        // console.log("here")
+        // console.log(ages2)
 
-        var extent = d3.extent(category, function(d) {return d.value})
+        var extent = d3.extent(ages, function(d) {return d.value;})
+        console.log(extent);
 
 
         var y = d3.scaleLinear()
             .domain([0, extent[1] + 10])
             .range([height, 300])
+
         //setting up the colors
-        function colorPicker(cat) {
-            if (cat == "chemistry") {
-                return "#f2db48" //minion yellow
-            } else if (cat == "literature") {
-                return "#c97064" //red
-            } else if (cat == "medicine") {
-                return "#bca371" //wood brown
-            } else if (cat == "peace") {
-                return "#a6b07e" //sand (sage)
-            } else if (cat == "physics") {
-                return "#68a357" //russian green
-            } else if (cat == "economics") {
-                return "#32965d"  //sea green
-            }
-            return "#ffffff";
-        }
+        // function colorPicker(cat) {
+        //     if (cat == "chemistry") {
+        //         return "#f2db48" //minion yellow
+        //     } else if (cat == "literature") {
+        //         return "#c97064" //red
+        //     } else if (cat == "medicine") {
+        //         return "#bca371" //wood brown
+        //     } else if (cat == "peace") {
+        //         return "#a6b07e" //sand (sage)
+        //     } else if (cat == "physics") {
+        //         return "#68a357" //russian green
+        //     } else if (cat == "economics") {
+        //         return "#32965d"  //sea green
+        //     }
+        //     return "#ffffff";
+        // }
 
 
         //drawing the bars
-        chart1G.selectAll()
-            .data(category)
+        chart2G.selectAll()
+            .data(ages)
             .enter()
             .append("rect")
             .attr("class", "bar")
-            .attr("x", function (d) { return x(d.key) + 50})
-            .attr("y", function(d) {return y(d.value) - 275})
+            .attr("x", function (d) { return x(d.key) + 50 })
+            .attr("y", function(d) {return y(d.value) - 240})
             .attr("width", 20)
             .attr("height", function (d) { return height - y(d.value) })
             //coloring the bar
-            .attr("fill", function (d) {return colorPicker(d.key) } )
-        chart1G.append('g').attr('class', 'xaxis')
-                .attr("transform", "translate (40, 325)")
+            .attr("fill", "lightblue");
+
+
+        chart2G.append('g').attr('class', 'xaxis')
+                .attr("transform", "translate (40, 320)")
                 .call(d3.axisBottom(x))
 
-        chart1G.append('g').attr('class', 'y axis')
-                .attr("transform", "translate (40, -275)")
+
+        chart2G.append('g').attr('class', 'y axis')
+                .attr("transform", "translate (40, -245)")
                 .call(d3.axisLeft(y))
+
+        chart2G.append("text")
+            .text ("Ages")
+            .attr('dy', '35em')
+            .attr('dx', '17em')
+            .style("font-family", "Arial")
+            .style("font-weight", "bold")
+            .style("font-size", "10px");
+
+        chart2G.append("text")
+            .text ("Number of Winners")
+            .attr("transform", "rotate(-90)")
+            .attr('dy', '1em')
+            .attr('dx', '-25em')
+            .attr("text-anchor", "bottom")
+            .style("font-family", "Arial")
+            .style("font-weight", "bold")
+            .style("font-size", "10px");
+
+        chart2G.append("text")
+                    //.attr("text-anchor", "center")
+                    .attr('dy', '2em')
+                    .attr('dx', '4em')
+                    .attr("id", "graphlabel")
+                    .text("Age Ranges")
+                    .style("font-family", "Arial")
+                    .style("font-weight", "bold")
+                    .style("font-size", "25px");
 
 
         //setting up axes of the chart
         var x0 = d3.scaleBand()
-            .domain(category.map(function (d) { return d.key }))
+            .domain(ages.map(function (d) { return d.key }))
             .range([0, width/2 - 100])
 
 
-        var extent0 = d3.extent(category, function(d) {return d.value})
+        var extent0 = d3.extent(ages, function(d) {return d.value})
 
         var y0 = d3.scaleLinear()
             .domain([0, extent0[1] + 10])
             .range([height, 300])
+
 
 }}
