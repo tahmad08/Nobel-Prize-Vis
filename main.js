@@ -68,10 +68,11 @@ d3.csv(dataFileName, function(error, allData) {
         d.category = d.category
         //d.year = d3.time.format("%Y-%m-%d").parse(d.year)
         //parseData(d.year);
-        d.motivation = d.motivation;
+        d.motivation = d.motivation
         if (d.died == "0000-00-00") {
              d.died = "Present"
         }
+
     });
     //histogram binning
     const histogram = d3.histogram()
@@ -187,11 +188,12 @@ function tooltipon(d){
 function tooltipoff(d) {
     d3.select(this)
         .classed("selected", false)
-        tooltip.transition()
+        //COLORFIX it goes back to when you stop hovering
+        // .style("stroke", "none");
+      tooltip.transition()
            .duration(500)
            .style("opacity", 0);
   }
-
 
 
 function pieCategory(){
@@ -277,7 +279,6 @@ function pieCategory(){
                 .attr('dx', '-1.0em')
                 .style("font-family","Arial")
                 .style("font-size","20px");
-                // .style("font-size","25px");
 
 
             })
@@ -389,7 +390,6 @@ function ageChart(){
             .key(function (d) {return (Math.floor(d.age/10) * 10 + "s");})
             //.entries(function (d) {return d.age;})
             .rollup(function(v) { return v.length; })
-
             .entries(data_arr);
             console.log(JSON.stringify(ages)); //prints the arrays with values
 
@@ -400,13 +400,7 @@ function ageChart(){
             .range([0, width/2 - 100])
         console.log(ages.map(function (d) { return d.key }));
 
-        // var ages2 = d3.nest()
-        //     .key(ages.key)
-        //     .rollup(function(v) { return v.length; })
-        //     .entries(data_arr);
-        //
-        // console.log("here")
-        // console.log(ages2)
+
 
         var extent = d3.extent(ages, function(d) {return d.value;})
         console.log(extent);
@@ -415,24 +409,6 @@ function ageChart(){
         var y = d3.scaleLinear()
             .domain([0, extent[1] + 10])
             .range([height, 300])
-
-        //setting up the colors
-        // function colorPicker(cat) {
-        //     if (cat == "chemistry") {
-        //         return "#f2db48" //minion yellow
-        //     } else if (cat == "literature") {
-        //         return "#c97064" //red
-        //     } else if (cat == "medicine") {
-        //         return "#bca371" //wood brown
-        //     } else if (cat == "peace") {
-        //         return "#a6b07e" //sand (sage)
-        //     } else if (cat == "physics") {
-        //         return "#68a357" //russian green
-        //     } else if (cat == "economics") {
-        //         return "#32965d"  //sea green
-        //     }
-        //     return "#ffffff";
-        // }
 
 
         //drawing the bars
@@ -446,7 +422,17 @@ function ageChart(){
             .attr("width", 20)
             .attr("height", function (d) { return height - y(d.value) })
             //coloring the bar
-            .attr("fill", "lightblue");
+            .attr("fill", "lightblue")
+            .on("mouseover", function(d) {
+                d3.select(this)
+                .attr("fill", "red")
+                d3.selectAll('.' + d.data.age).style("fill", "red");
+            })
+            .on("mouseout", function(d) {
+                d3.select(this)
+                .attr("fill", "lightblue")
+            })
+            .each(function(d, i) { this._current = i; });
 
 
         chart2G.append('g').attr('class', 'xaxis')
@@ -481,7 +467,7 @@ function ageChart(){
                     .attr('dy', '2em')
                     .attr('dx', '4em')
                     .attr("id", "graphlabel")
-                    .text("Age Ranges")
+                    .text("Age of Winners")
                     .style("font-family", "Arial")
                     .style("font-weight", "bold")
                     .style("font-size", "25px");
