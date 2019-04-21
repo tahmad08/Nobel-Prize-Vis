@@ -67,6 +67,15 @@ div.tooltip {
   top: calc(50% - 24px);
   left: calc(50% - 24px); */
 }
+#outer{
+  width: 1400px;
+  height: 1000px;
+}
+#wrapper{
+  font-family: Arial;
+  /* text-align: center; */
+  display: inline-block;
+}
 
 #chart0{
   position: relative;
@@ -77,10 +86,10 @@ div.tooltip {
 
 #chart3{
   position: relative;
-  float: right;
-  margin-right: 20px;
+  float: left;
+  /* margin-right: 20px;
   padding-right: 20px;
-  bottom: -100px;
+  bottom: -100px; */
   width: 400px;
   height: 400px;
   font-family: Arial;
@@ -98,11 +107,12 @@ div.tooltip {
 #chart2{
   position: relative;
   float: left;
-  width: 325px;
-  height: 375px;
+  width: 400px;
+  height: 400px;
 }
 
 #heading {
     font-family: Arial;
     text-align: center;
+    /* display: inline-block; */
 }

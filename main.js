@@ -14,7 +14,7 @@ CTRL + F "TODO" AND FINISH
  */
 
  //call to make the category chart
-ageChart();
+// ageChart();
 pieCategory();
 
 //width0 and height0 are for the actual svg
@@ -64,6 +64,7 @@ d3.csv(dataFileName, function(error, allData) {
     allData.forEach(function(d) {
         d.fullname = d.fullname
         d.year = +d.year
+        d.age = d.age
         d.category = d.category
         d.motivation = d.motivation
         if (d.died == "0000-00-00") {
