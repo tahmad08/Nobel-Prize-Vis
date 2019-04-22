@@ -1,16 +1,12 @@
 /* TO DO's:
 CTRL + F "TODO" AND FINISH
 (X) linking for age chart
-( ) the timeline axis needs a label
+(X) the timeline axis needs a label
         (X) timeline axis ticks should NOT have commas
 (X) try to make the category chart into a pie chart
 (X) link the category chart to the timeline
 (X) make 2nd chart
-( ) also add a brush that if you highlight certain dots,
-    it returns stats (right below the name, age... detail) such as:
-    range of years highlighted, total # of prizes
-    most common category in those years, etc
-    gender ratio
+
 (X) fix position of the svg elements
 (X) placeholder text for the pie chart in the center should say "categories"
  */
@@ -207,7 +203,7 @@ function tooltipon(d){
 
     d3.select(this)
         .classed("selected", true)
-        .style("fill", "red");
+        .style("fill", "lightorange");
 
     tooltip.transition()
         .duration(200)
@@ -250,7 +246,7 @@ function pieCategory(){
 
     //COLORFIX
     var color = d3.scaleOrdinal()
-        .range(["#f2db48", "#c97064", "#bca371", "#a6b07e", "#68a357", "#32965d"]);
+        .range(["#ff8c00", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#98abc5"])
 
     //TODO change the names so they're capitalized
     var dataSet = [
@@ -262,9 +258,9 @@ function pieCategory(){
         {name: "economics", value: econP}];
 
     var datum = [chemP, litP, medP, peaP, physP, econP];
-    var colorSet = d3.map({"chemistry": "#f2db48", "literature": "#c97064",
-            "medicine": "#bca371", "peace": "#a6b07e", "physics": "#68a357",
-            "economics": "#32965d"});
+    var colorSet = d3.map({"chemistry": "#ff8c00", "literature": "#8a89a6",
+            "medicine": "#7b6888", "peace": "#6b486b", "physics": "#a05d56",
+            "economics": "#d0743c"});
 
     var svg = d3.select("#chart1")
         .append("svg:svg") //create the SVG element inside the <body>
@@ -450,15 +446,15 @@ function ageChart(){
             .attr("width", 20)
             .attr("height", function (d) { return height - y(d.value) })
             //coloring the bar
-            .attr("fill", "lightblue")
+            .attr("fill", "#98abc5")
             .on("mouseover", function(d) {
                 d3.select(this)
-                    .attr("fill", "red")
+                    .attr("fill", "#946E83")
                     d3.selectAll(".b" + d.key).style("fill", "pink");
             })
             .on("mouseout", function(d) {
                 d3.select(this)
-                    .attr("fill", "lightblue")
+                    .attr("fill", "#98abc5")
                 d3.selectAll(".b" + d.key).style("fill", "lightgrey");
             })
             .each(function(d, i) { this._current = i; });

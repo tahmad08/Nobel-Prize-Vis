@@ -9,7 +9,7 @@ text.label {
 }
 
 .bar2 {
-      fill: red;
+      fill: orange;
     }
 
 .axis text {
@@ -31,7 +31,7 @@ circle {
 }
 
 .selected {
-	fill:red;
+	fill:brown;
 }
 
 .hovered {
