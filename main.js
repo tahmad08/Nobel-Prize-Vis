@@ -1,6 +1,6 @@
 /* TO DO's:
 CTRL + F "TODO" AND FINISH
-( ) linking for age chart
+(X) linking for age chart
 ( ) the timeline axis needs a label
         (X) timeline axis ticks should NOT have commas
 (X) try to make the category chart into a pie chart
@@ -37,9 +37,11 @@ var x = d3.scaleLinear()
 //create the svg and append it, translated halfway down the screen
 var chart0G = d3.select("#chart4")
     .append("svg:svg")
+    
     .attr("width", width)
     .attr("height", height)
     .append("g")
+    .attr("transform", "translate(0," + 20 + ")")
 
 //tooltip
 const tooltip = d3.select("#chart4")
@@ -137,7 +139,8 @@ d3.csv(dataFileName, function(error, allData) {
         })
         .attr("cx", 0) //g element already at correct x pos
         .attr("cy", (d, i) => {
-            return -1*(- i * 2.3 * d.rad - d.rad)})
+            var ciry = -1*(- i * 2.3 * d.rad - d.rad);
+            return ciry})
         .attr("r", d => d.rad)
         .on("click", function(d){
             d3.select('#name')
@@ -154,7 +157,9 @@ d3.csv(dataFileName, function(error, allData) {
             .text(d.categ)
         })
         .on("mouseover", tooltipon)
-        .on('mouseout', tooltipoff);
+        .on('mouseout', tooltipoff)
+
+        ;
 
         //add x axis on top
         //TODO add a label to the x axis
@@ -162,8 +167,17 @@ d3.csv(dataFileName, function(error, allData) {
             .attr("class", "axis axis--x")
             .attr("transform", "translate(0," + 20 + ")")
             .call(d3.axisTop(x)
-                .tickFormat(d3.format("d")));
+                .tickFormat(d3.format("d")))
+        chart0G.append("text")
+            .attr('dy', '-0.2em')
+            .attr('dx', '39em')
+            .attr("id", "graphlabel")
+            .text("YEARS")
+            .style("font-family", "Garamond")
+            .style("font-size", "15px");
 
+        
+            
 });
 
 //date formating TODO change the lived from YYYY-MM-DD TO Month Day, YYYY

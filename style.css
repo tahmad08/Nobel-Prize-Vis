@@ -2,8 +2,6 @@
     padding: 20px;
 }
 
-
-
 text.label {
     text-anchor: top;
     font-size: 11px;
@@ -77,7 +75,7 @@ div.tooltip {
 
 #chart0{
   position: relative;
-  top:400px;
+  top:10px;
   width: 1300px;
   height: 600px;
 }
@@ -89,7 +87,7 @@ div.tooltip {
   float: left;
   line-height:25px;
   width: 500px;
-  height: 300px;
+  height: 225px;
 }
 
 
