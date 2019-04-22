@@ -203,7 +203,7 @@ function tooltipon(d){
 
     d3.select(this)
         .classed("selected", true)
-        .style("fill", "lightorange");
+        .style("fill", "brown");
 
     tooltip.transition()
         .duration(200)
@@ -450,7 +450,7 @@ function ageChart(){
             .on("mouseover", function(d) {
                 d3.select(this)
                     .attr("fill", "#946E83")
-                    d3.selectAll(".b" + d.key).style("fill", "pink");
+                    d3.selectAll(".b" + d.key).style("fill", "#946E83");
             })
             .on("mouseout", function(d) {
                 d3.select(this)
