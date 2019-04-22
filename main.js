@@ -285,7 +285,7 @@ function pieCategory(){
                 // .attr('text-anchor', 'right')
                 .attr('dy', '1.0em')
                 .attr('dx', '-2.0em')
-                .style("font-family","Arial")
+                .style("font-family","Garamond")
                 .style("font-size","15px");
 
                 // .style("font-size","25px");
@@ -296,7 +296,7 @@ function pieCategory(){
                 .style("fill", colorSet.get(d.data.name))
                 .style('text-align', 'center')
                 .attr('dx', '-1.0em')
-                .style("font-family","Arial")
+                .style("font-family","Garamond")
                 .style("font-size","20px");
 
 
@@ -340,8 +340,7 @@ function pieCategory(){
             .attr('dx', '-2em')
             .attr("id", "graphlabel")
             .text("Category")
-            .style("font-family", "Arial")
-            .style("font-weight", "bold")
+            .style("font-family", "Garamond")
             .style("font-size", "25px");
 
         g.append('text')
@@ -462,21 +461,19 @@ function ageChart(){
 
         chart2G.append("text")
             .text ("Ages")
-            .attr('dy', '35em')
-            .attr('dx', '17em')
-            .style("font-family", "Arial")
-            .style("font-weight", "bold")
-            .style("font-size", "10px");
+            .attr('dy', '32em')
+            .attr('dx', '15em')
+            .style("font-family", "Garamond")
+            .style("font-size", "11px");
 
         chart2G.append("text")
             .text ("Number of Winners")
             .attr("transform", "rotate(-90)")
-            .attr('dy', '1em')
-            .attr('dx', '-25em')
+            .attr('dy', '.7em')
+            .attr('dx', '-20em')
             .attr("text-anchor", "bottom")
-            .style("font-family", "Arial")
-            .style("font-weight", "bold")
-            .style("font-size", "10px");
+            .style("font-family", "Garamond")
+            .style("font-size", "12px");
 
         chart2G.append("text")
                     //.attr("text-anchor", "center")
@@ -484,9 +481,8 @@ function ageChart(){
                     .attr('dx', '4em')
                     .attr("id", "graphlabel")
                     .text("Age of Winners")
-                    .style("font-family", "Arial")
-                    .style("font-weight", "bold")
-                    .style("font-size", "25px");
+                    .style("font-family", "Garamond")
+                    .style("font-size", "22px");
 
 
         //setting up axes of the chart

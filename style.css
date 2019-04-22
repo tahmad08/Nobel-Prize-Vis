@@ -2,9 +2,7 @@
     padding: 20px;
 }
 
-p {
-  font-family: Arial, Helvetica, sans-serif;
-}
+
 
 text.label {
     text-anchor: top;
@@ -72,7 +70,7 @@ div.tooltip {
   height: 1000px;
 }
 #wrapper{
-  font-family: Arial;
+  font-family: Garamond;
   /* text-align: center; */
   display: inline-block;
 }
@@ -85,16 +83,19 @@ div.tooltip {
 }
 
 #chart3{
+  font-family: Garamond;
+
   position: relative;
   float: left;
   line-height:25px;
-  width: 400px;
-  height: 400px;
-  font-family: Arial;
+  width: 500px;
+  height: 300px;
 }
 
 
 #chart1{
+  font-family: Garamond;
+
   position: relative;
   float: left;
   width: 400px;
@@ -103,6 +104,8 @@ div.tooltip {
 }
 
 #chart2{
+  font-family: Garamond;
+
   position: relative;
   float: left;
   width: 400px;
@@ -110,7 +113,7 @@ div.tooltip {
 }
 
 #heading {
-    font-family: Arial;
+    font-family: Garamond;
     text-align: left;
     margin-left: 450px;
     /* display: inline-block; */
