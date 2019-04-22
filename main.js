@@ -1,15 +1,17 @@
 /* TO DO's:
 CTRL + F "TODO" AND FINISH
+( ) linking for age chart
 ( ) the timeline axis needs a label
         (X) timeline axis ticks should NOT have commas
 (X) try to make the category chart into a pie chart
 (X) link the category chart to the timeline
-( ) make 2nd chart
+(X) make 2nd chart
 ( ) also add a brush that if you highlight certain dots,
     it returns stats (right below the name, age... detail) such as:
     range of years highlighted, total # of prizes
     most common category in those years, etc
-( ) fix position of the svg elements
+    gender ratio
+(X) fix position of the svg elements
 (X) placeholder text for the pie chart in the center should say "categories"
  */
 
@@ -105,7 +107,29 @@ d3.csv(dataFileName, function(error, allData) {
         //add the circles!!
         .enter()
         .append("circle")
-        .attr("class", d => d.categ)
+        .attr("class", function(d,i) {
+            var ageG;
+            if(d.age < 20){
+                ageG = "b10s"
+            }else if(d.age < 30 && d.age > 20){
+                ageG = "b20s"
+            }else if(d.age < 40 && d.age > 30){
+                ageG = "b30s"
+            }else if(d.age < 50 && d.age > 40){
+                ageG = "b40s"
+            }else if(d.age < 60 && d.age > 50){
+                ageG = "b50s"
+            }else if(d.age < 70 && d.age > 60){
+                ageG = "b60s"
+            }else if(d.age < 80 && d.age > 70){
+                ageG = "b70s"
+            }else if(d.age < 90 && d.age > 80){
+                ageG = "b80s"
+            } else {
+                ageG = "b90s"
+            }
+             return d.categ + " " + ageG;
+        })
         .attr("id", function(d,i) {
             //id for circles is bin id + circle #
             cbin = d3.select(this.parentElement).attr("id").substring(3);
@@ -170,6 +194,7 @@ function tooltipon(d){
     d3.select(this)
         .classed("selected", true)
         .style("fill", "red");
+
     tooltip.transition()
         .duration(200)
         .style("opacity", .9);
@@ -276,17 +301,6 @@ function pieCategory(){
 
 
             })
-        // .on("click", function(d){
-        //     //selects all the circles in the category selected and highlights them
-        //     // var currClass = d3.selectAll('.' + d.data.name).attr("class");
-        //     // console.log(currClass);
-        //     var col = d3.selectAll('.' + d.data.name).style("fill");
-        //     var curr = (col == d3.rgb(211,211,211));
-        //     d3.selectAll('.' + d.data.name).style("fill", colorSet.get(d.data.name));
-        //     clicked = true;
-        //     //todo: add a button that clears the chart
-        //
-        // })
         .on("mouseout", function(d) {
             d3.select(this)
                 .style("cursor", "none")
@@ -385,8 +399,8 @@ function ageChart(){
             //.entries(function (d) {return d.age;})
             .rollup(function(v) { return v.length; })
             .entries(data_arr);
-            console.log(JSON.stringify(ages)); //prints the arrays with values
-
+            // console.log(JSON.stringify(ages)); //prints the arrays with values
+        var ageMap = ages;
 
         // //setting up axes of the chart
         // var sorted = ages.sort((a, b) => a.value - b.value);
@@ -397,10 +411,14 @@ function ageChart(){
         var x = d3.scaleBand()
             .domain(ages.map(function (d) { return d.key }))
             .range([0, width/2 - 100])
-        console.log(ages.map(function (d) { return d.key }));
+        // console.log("ages")
+        // console.log(ages.map(function (d) { return d.key }));
+        // console.log("agemap")
+        // console.log(JSON.stringify(ages)); //prints the arrays with values
 
         var extent = d3.extent(ages, function(d) {return d.value;})
-        console.log(extent);
+        // console.log("extent")
+        // console.log(extent);
 
 
         var y = d3.scaleLinear()
@@ -422,12 +440,13 @@ function ageChart(){
             .attr("fill", "lightblue")
             .on("mouseover", function(d) {
                 d3.select(this)
-                .attr("fill", "red")
-                d3.selectAll('.' + d.data.age).style("fill", "red");
+                    .attr("fill", "red")
+                    d3.selectAll(".b" + d.key).style("fill", "pink");
             })
             .on("mouseout", function(d) {
                 d3.select(this)
-                .attr("fill", "lightblue")
+                    .attr("fill", "lightblue")
+                d3.selectAll(".b" + d.key).style("fill", "lightgrey");
             })
             .each(function(d, i) { this._current = i; });
 
