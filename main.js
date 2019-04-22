@@ -14,7 +14,7 @@ CTRL + F "TODO" AND FINISH
  */
 
  //call to make the category chart
-// ageChart();
+ageChart();
 pieCategory();
 
 //width0 and height0 are for the actual svg
@@ -45,9 +45,6 @@ const tooltip = d3.select("#chart4")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
-const t = d3.transition()
-    .duration(1000);
-
 //data file
 var dataFileName = "nobel_laureates.csv"
 
@@ -70,8 +67,8 @@ d3.csv(dataFileName, function(error, allData) {
         if (d.died == "0000-00-00") {
              d.died = "Present"
         }
-
     });
+
     //histogram binning
     const histogram = d3.histogram()
         .domain(x.domain())
@@ -150,7 +147,6 @@ function datef(d){
     // console.log(d);
     var origDate = d;
     var formatTime = d3.timeFormat("%Y-%m-%d");
-    console.log(formatTime(origDate)); // "June 30, 2015"
     // var format = d3.time.format("%Y-%m-%d");
     // // convert the date string into a date object:
     // var date = format.parse(string);
@@ -392,13 +388,16 @@ function ageChart(){
             console.log(JSON.stringify(ages)); //prints the arrays with values
 
 
-        //setting up axes of the chart
+        // //setting up axes of the chart
+        // var sorted = ages.sort((a, b) => a.value - b.value);
+        // console.log("sorted" + JSON.stringify(sorted));
+        ages.sort(function(x, y){
+            return d3.ascending(x.key, y.key);
+         })
         var x = d3.scaleBand()
             .domain(ages.map(function (d) { return d.key }))
             .range([0, width/2 - 100])
         console.log(ages.map(function (d) { return d.key }));
-
-
 
         var extent = d3.extent(ages, function(d) {return d.value;})
         console.log(extent);

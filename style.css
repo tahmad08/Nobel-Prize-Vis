@@ -87,9 +87,7 @@ div.tooltip {
 #chart3{
   position: relative;
   float: left;
-  /* margin-right: 20px;
-  padding-right: 20px;
-  bottom: -100px; */
+  line-height:25px;
   width: 400px;
   height: 400px;
   font-family: Arial;
@@ -113,6 +111,7 @@ div.tooltip {
 
 #heading {
     font-family: Arial;
-    text-align: center;
+    text-align: left;
+    margin-left: 450px;
     /* display: inline-block; */
 }
