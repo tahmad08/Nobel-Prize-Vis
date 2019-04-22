@@ -69,6 +69,7 @@ div.tooltip {
 }
 #wrapper{
   font-family: Garamond;
+
   /* text-align: center; */
   display: inline-block;
 }
@@ -78,6 +79,7 @@ div.tooltip {
   top:10px;
   width: 1300px;
   height: 600px;
+
 }
 
 #chart3{
@@ -114,5 +116,6 @@ div.tooltip {
     font-family: Garamond;
     text-align: left;
     margin-left: 450px;
+
     /* display: inline-block; */
 }
